@@ -188,6 +188,18 @@ def get_scatter_chart(selected_site, payload_range):
                             
                               
 if __name__ == '__main__':
-    app.run_server()                                                    
+    app.run_server()    
+
+def get_pie(selected_site):
+    filtered_df = spacex_df
+    if value == 'All':
+        filtered_df = spacex_df.groupby('Launch Site').sum().reset_index()
+        fig = px.pie(filtered_df, values='class', names='Launch Site', title='Total Success Launches By Site')
+        return fig
+
+    else:
+        filtered_df = spacex_df[spacex_df['Launch Site'] == selected_site].groupby('class').sum().reset_index()
+        fig = px.pie(filtered_df,values='class', names='class', title="Total launches for site {}".format(enter_site))
+        return fig       
 
 
