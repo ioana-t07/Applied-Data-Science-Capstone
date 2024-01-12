@@ -61,12 +61,12 @@ app.layout=html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
               Input(component_id='site-dropdown', component_property='value'))
 def get_pie(selected_site):
     filtered_df = spacex_df
-    if entered_site == 'ALL':
+    if selected_site == 'ALL':
         fig = px.pie(filtered_df, names='class', title='Total success launches for all sites')
     else:
-        filtered_df = spacex_df[spacex_df['Launch Site'] == entered_site]
+        filtered_df = spacex_df[spacex_df['Launch Site'] == selected_site]
         filtered_df = filtered_df.groupby(['Launch Site', 'class']).size().reset_index(name='class count')
-        fig = px.pie(filtered_df, values='class count', names='class', title=f"Total Success Launches for site {entered_site}")
+        fig = px.pie(filtered_df, values='class count', names='class', title=f"Total Success Launches for site {selected_site}")
     return fig
 
 #TASK 3: Add a Range Slider to Select Payload
