@@ -59,17 +59,18 @@ app.layout=html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
 # Function decorator to specify function input and output
 @app.callback(Output(component_id='success-pie-chart', component_property='figure'),
               Input(component_id='site-dropdown', component_property='value'))
-def get_pie(selected_site):
+def get_pie(value):
     filtered_df = spacex_df
-    if selected_site == 'ALL':
-        filtered_df = spacex_df.groupby('Launch Site').sum().reset_index()
-        fig = px.pie(filtered_df, names='class', title='Total success launches for all sites')
+    if value == 'All':
+        fig = px.pie(filtered_df, values='class', names='Launch Site', title='Total Success Launches for all sites')
+        return fig
+
     else:
-        filtered_df = spacex_df[spacex_df['Launch Site'] == selected_site]
-        filtered_df = filtered_df.groupby(['Launch Site', 'class']).size().reset_index(name='class count')
-        fig = px.pie(filtered_df, values='class count', names='class', 
-                     title=f"Total Success Launches for site {selected_site}")
-    return fig
+        filtered_df = spacex_df[spacex_df['Launch Site'] == value].groupby(['Launch Site', 'class']). \
+        size().reset_index(name='class count')
+        title = f"Total Success Launches for site {value}"
+        fig = px.pie(filtered_df,values='class count', names='class', title=title)
+        return fig
 
 #TASK 3: Add a Range Slider to Select Payload
                               
@@ -95,4 +96,4 @@ def get_scatter_chart(selected_site, payload_range):
                             
                               
 if __name__ == '__main__':
-    app.run_server(port=8099)
+    app.run_server()
